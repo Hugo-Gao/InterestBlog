@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>Material Design Bootstrap</title>
+  <title>InterestBlog控制台</title>
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
   <!-- Bootstrap core CSS -->
@@ -43,8 +43,8 @@ position:absolute;
       <div class="container-fluid">
 
         <!-- Brand -->
-        <a class="navbar-brand waves-effect" href="https://mdbootstrap.com/docs/jquery/" target="_blank">
-          <strong class="blue-text">MDB</strong>
+        <a class="navbar-brand waves-effect" href="/backend/" target="_blank">
+          <strong class="blue-text">InterestBlog</strong>
         </a>
 
         <!-- Collapse -->
@@ -53,47 +53,37 @@ position:absolute;
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- Links -->
+        <!-- 头部标题 -->
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
           <!-- Left -->
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <a class="nav-link waves-effect" href="#">Home
+              <a class="nav-link waves-effect" href="/backend/">Home
                 <span class="sr-only">(current)</span>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link waves-effect" href="https://mdbootstrap.com/docs/jquery/" target="_blank">About
-                MDB</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link waves-effect" href="https://mdbootstrap.com/docs/jquery/getting-started/download/"
-                target="_blank">Free
-                download</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link waves-effect" href="https://mdbootstrap.com/education/bootstrap/" target="_blank">Free
-                tutorials</a>
+              <a class="nav-link waves-effect" href="" target="_blank">查看博客</a>
             </li>
           </ul>
 
           <!-- Right -->
           <ul class="navbar-nav nav-flex-icons">
             <li class="nav-item">
-              <a href="https://www.facebook.com/mdbootstrap" class="nav-link waves-effect" target="_blank">
+              <a href="https://www.sina.com" class="nav-link waves-effect" target="_blank">
                 <i class="fab fa-facebook-f"></i>
               </a>
             </li>
             <li class="nav-item">
-              <a href="https://twitter.com/MDBootstrap" class="nav-link waves-effect" target="_blank">
+              <a href="https://twitter.com/" class="nav-link waves-effect" target="_blank">
                 <i class="fab fa-twitter"></i>
               </a>
             </li>
             <li class="nav-item">
-              <a href="https://github.com/mdbootstrap/bootstrap-material-design" class="nav-link border border-light rounded waves-effect"
+              <a href="https://github.com/Hugo-Gao" class="nav-link border border-light rounded waves-effect"
                 target="_blank">
-                <i class="fab fa-github mr-2"></i>MDB GitHub
+                <i class="fab fa-github mr-2"></i>GitHub
               </a>
             </li>
           </ul>
@@ -107,22 +97,19 @@ position:absolute;
     <!-- Sidebar -->
     <div class="sidebar-fixed position-fixed">
 
-      <a class="logo-wrapper waves-effect">
-        <img src="https://mdbootstrap.com/img/logo/mdb-email.png" class="img-fluid" alt="">
+      <a class="logo-wrapper waves-effect" style="margin-right: 50px">
+        <img src="https://i.loli.net/2018/12/29/5c273ec02db9e.png"  alt="">
       </a>
 
       <div class="list-group list-group-flush">
-        <a href="#" class="list-group-item active waves-effect">
-          <i class="fas fa-chart-pie mr-3"></i>Dashboard
+        <a href="#" class="list-group-item active waves-effect" s>
+          <i class="fas fa-chart-pie mr-3"></i>控制台
         </a>
         <a href="#" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-user mr-3"></i>Profile</a>
+          <i class="fas fa-user mr-3"></i>个人设置</a>
         <a href="#" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-table mr-3"></i>Tables</a>
-        <a href="#" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-map mr-3"></i>Maps</a>
-        <a href="#" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-money-bill-alt mr-3"></i>Orders</a>
+          <i class="fas fa-table mr-3"></i>写博客</a>
+
       </div>
 
     </div>
