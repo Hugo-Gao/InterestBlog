@@ -1,0 +1,2 @@
+2018-12-29 23:28:36.280 [main] DEBUG [com.gaoyunfan.service.UserService:75] - user 已经更新为User(id=null, email=598335769@qq.com, password=123456, avatarFile=null, avaterPath=null, aboutme=This is a new test , sinaUrl=null, githubUrl=null, qq=null)
+2018-12-29 23:31:19.935 [main] DEBUG [com.gaoyunfan.service.UserService:75] - user 已经更新为User(id=null, email=598335769@qq.com, password=123456, avatarFile=null, avaterPath=null, aboutme=This is a new test , sinaUrl=null, githubUrl=null, qq=null)
