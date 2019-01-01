@@ -35,7 +35,10 @@ public class UserController {
             System.out.println("----register-----");
             return "user/register";
         }
-
+        if (userService.getUser() != null) {
+            ResultMsg msg = ResultMsg.errorMsg("该服务器已经注册，请直接登录");
+            return "redirect:/user/register?" + msg.asUrlParams();
+        }
         //如果携带有user，则进行注册
         ResultMsg msg = UserHelper.validate(user);
         if (msg.isSuccess() && userService.addUser(user,msg)) {

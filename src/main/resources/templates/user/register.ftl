@@ -1,79 +1,91 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-    <title>注册</title>
-    <!-- Custom Theme files -->
-    <link rel="stylesheet" href="/layui/css/layui.css">
-    <link href="/css/style.css" rel="stylesheet" type="text/css" media="all"/>
-    <script src="/layui/layui.js"></script>
-</head>
-<body style="background: " class="register">
-<div class="login">
-    <h1>请注册，以使用 InterestBlog</h1>
-    <div class="login-top">
-        <h1>REGISTER FORM</h1>
-        <form method="post" enctype="multipart/form-data" action="/user/register">
-            <div class="layui-form-item">
-                <label class="layui-form-label">邮箱</label>
-                <div class="layui-input-block">
-                    <input type="text" name="email" required lay-verify="required" placeholder="请输入邮箱"
-                           autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">密码</label>
-                <div class="layui-input-block">
-                    <input type="password" name="password" required lay-verify="required" placeholder="请输入密码"
-                           autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">博客名称</label>
-                <div class="layui-input-block">
-                    <input type="text" name="blogName" required lay-verify="required" placeholder="请输入名称"
-                           autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">请输入自我介绍</label>
-                <div class="layui-input-block">
-                    <textarea name="aboutme" placeholder="请输入内容" class="layui-textarea"></textarea>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">请选择头像</label>
-                <div class="layui-input-block">
-                    <div id="test-image-preview" style="border: 1px solid #ccc; width: 100%; height: 200px; background-size: contain; background-repeat: no-repeat; background-position: center center;"></div>
-                    <input type="file" id="test-image-file" name="avatarFile">
-                </div>
-            </div>
-            <div style="text-align: center;">
-                <button type="submit" class="layui-btn layui-btn-lg">登录</button>
-            </div>
-        </form>
+<!doctype html>
+<html lang="en" dir="ltr">
+<@common.header/>
+<body class="">
+<div class="page">
+    <div class="page-single">
+        <div class="container">
+            <div class="row">
+                <div class="col col-login mx-auto">
+                    <div class="text-center mb-6">
+                        <img src="https://i.loli.net/2018/12/29/5c273ec02db9e.png" alt="">
+                    </div>
+                    <form class="card" method="post" enctype="multipart/form-data" action="/user/register">
+                        <div class="card-body p-6">
+                            <div class="card-title">创建一个新账户</div>
+                            <div class="form-group">
+                                <label class="form-label">Email地址</label>
+                                <input type="email" name="email" class="form-control" placeholder="Enter name">
+                            </div>
 
-    </div>
-    <div class="login-bottom">
-        <h3>Welcome</h3>
+                            <div class="form-group">
+                                <label class="form-label">密码</label>
+                                <input type="password" name="password" class="form-control" placeholder="Password">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Blog名称</label>
+                                <input type="text" name="blogName" class="form-control" placeholder="Enter email">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">请输入自我介绍</label>
+                                <input type="text" name="aboutme" class="form-control" placeholder="Enter email">
+                            </div>
+
+                            <div class="form-group">
+                                <div class="form-label">选择头像
+                                </div>
+                                <div class="custom-file">
+                                    <input type="file" id="test-image-file" class="custom-file-input" name="avatarFile">
+                                    <label class="custom-file-label">Choose file</label>
+                                    <#--<div id="test-image-preview"-->
+                                         <#--style="text-align: center;border: 1px solid #ccc;width: 50px; height: 50px; background-size: contain; background-repeat: no-repeat; background-position: center center;"></div>-->
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="text-align: center">
+                            <span id="test-image-preview" class="avatar avatar-xl"></span>
+                            </div>
+
+                            <div class="form-footer">
+                                <button type="submit" class="btn btn-primary btn-block">注册</button>
+                            </div>
+
+                        </div>
+                    </form>
+                    <div class="text-center text-muted">
+                        已经有账户了？ <a href="/user/login">登录</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<div class="copyright">
-    <p>Copyright &copy; 2019.Company name All rights reserved Hugo-Gao</p>
-</div>
 
-<script type="text/javascript">
+<script type="text/javascript" >
+
+    $(document).ready(function() {
+        var errorMsg = getUrlParam("errorMsg");
+        var successMsg = getUrlParam("successMsg");
+        if(errorMsg){
+            errormsg("error",errorMsg);
+        }
+        if(successMsg) {
+        successmsg("success",successMsg);
+        }
+    });
     //检查是否支持FileReader对象
     var
         fileInput = document.getElementById('test-image-file'),
-        info = document.getElementById('test-file-info'),
         preview = document.getElementById('test-image-preview');
     // 监听change事件:
-    fileInput.addEventListener('change', function () {
+    fileInput.addEventListener('change', function ()
+    {
         // 清除背景图片:
         preview.style.backgroundImage = '';
         // 检查文件是否选择:
         if (!fileInput.value) {
-            info.innerHTML = '没有选择文件';
             return;
         }
         // 获取File引用:
@@ -85,21 +97,17 @@
         }
         // 读取文件:
         var reader = new FileReader();
-        reader.onload = function(e) {
-            var
-                data = e.target.result; // 'data:image/jpeg;base64,/9j/4AAQSk...(base64编码)...'
+        reader.onload = function (e)
+        {
+            var data = e.target.result; // 'data:image/jpeg;base64,/9j/4AAQSk...(base64编码)...'
             preview.style.backgroundImage = 'url(' + data + ')';
         };
         // 以DataURL的形式读取文件:
         reader.readAsDataURL(file);
     });
 
-    // layui.use('layer', function(){
-    //     var layer = layui.layer;
-    //     layer.msg('hello');
-    // });
+
+
 </script>
 </body>
-
-
 </html>
