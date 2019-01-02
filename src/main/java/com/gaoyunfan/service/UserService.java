@@ -97,4 +97,17 @@ public class UserService {
         addUser(saveUser, msg);
     }
 
+    public boolean validateUser(User user, ResultMsg msg) {
+        User saveUser = getUser();
+        if (saveUser == null) {
+            msg.setErrorMsg("请先注册");
+            return false;
+        }
+        if (saveUser.getEmail().equals(user.getEmail()) && saveUser.getPassword().equals(user.getPassword())) {
+            return true;
+        }else {
+            msg.setErrorMsg("帐号密码错误");
+            return false;
+        }
+    }
 }
