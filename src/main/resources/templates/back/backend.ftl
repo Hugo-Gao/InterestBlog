@@ -108,7 +108,7 @@
             </a>
             <a href="#" class="list-group-item list-group-item-action waves-effect">
                 <i class="fas fa-user mr-3"></i>个人设置</a>
-            <a href="#" class="list-group-item list-group-item-action waves-effect">
+            <a href="/backend/write_blog" class="list-group-item list-group-item-action waves-effect">
                 <i class="fas fa-table mr-3"></i>写博客</a>
 
         </div>

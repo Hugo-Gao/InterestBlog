@@ -10,9 +10,10 @@
         <setting name="defaultStatementTimeout" value="600"/>
     </settings>
     <typeAliases>
+
     </typeAliases>
 
     <mappers>
-
+        <mapper resource="mapper/blog_dao.xml"/>
     </mappers>
 </configuration>
