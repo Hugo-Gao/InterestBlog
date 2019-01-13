@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gaoyunfan.dao.BlogDao">
 
-    <insert id="insertBlog">
+    <insert id="insertBlog" useGeneratedKeys="true" keyProperty="id">
         insert into blog(title, content, createTime, modifyTime)
         values (#{title}, #{content}, #{createTime}, #{modifyTime})
     </insert>

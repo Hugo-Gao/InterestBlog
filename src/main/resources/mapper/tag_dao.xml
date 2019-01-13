@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gaoyunfan.dao.TagDao">
+    <insert id="insertTags">
+        insert into tag(tag) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item})
+        </foreach>
+    </insert>
+
+    <insert id="insertBlogTag">
+        insert into blog_tag(tagId, blogId) VALUES
+        <foreach collection="list" item="tag" index="index" separator=",">
+            ((select id from tag where tag=#{tag}),#{blogId})
+        </foreach>
+    </insert>
+
+    <select id="selectTags" resultType="java.lang.String">
+        select tag
+        from tag;
+    </select>
+</mapper>
+

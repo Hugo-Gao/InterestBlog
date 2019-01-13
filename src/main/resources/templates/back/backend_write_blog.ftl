@@ -15,6 +15,8 @@
     <!-- Your custom styles (optional) -->
     <link href="/css/style.min.css" rel="stylesheet">
     <link href="/css/style.min.css" rel="stylesheet">
+    <script src="/layui/layui.js"></script>
+    <script src="/js/common.js"></script>
     <style>
 
         .map-container {
@@ -103,7 +105,7 @@
         </a>
 
         <div class="list-group list-group-flush">
-            <a href="#" class="list-group-item waves-effect" s>
+            <a href="/backend/" class="list-group-item waves-effect">
                 <i class="fas fa-chart-pie mr-3"></i>控制台
             </a>
             <a href="#" class="list-group-item list-group-item-action waves-effect">
@@ -203,7 +205,17 @@
 <script type="text/javascript">
     // Animations initialization
     new WOW().init();
-
+    $(document).ready(function ()
+    {
+        var errorMsg = getUrlParam("errorMsg");
+        var successMsg = getUrlParam("successMsg");
+        if (errorMsg) {
+            errormsg("error", errorMsg);
+        }
+        if (successMsg) {
+            successmsg("success", successMsg);
+        }
+    });
 </script>
 
 </body>

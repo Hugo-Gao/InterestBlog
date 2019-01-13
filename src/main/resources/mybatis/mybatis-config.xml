@@ -8,6 +8,7 @@
         <setting name="useGeneratedKeys" value="true"/>
         <setting name="defaultExecutorType" value="REUSE"/>
         <setting name="defaultStatementTimeout" value="600"/>
+        <setting name="logImpl" value="STDOUT_LOGGING" />
     </settings>
     <typeAliases>
 
@@ -15,5 +16,7 @@
 
     <mappers>
         <mapper resource="mapper/blog_dao.xml"/>
+        <mapper resource="mapper/tag_dao.xml"/>
+
     </mappers>
 </configuration>

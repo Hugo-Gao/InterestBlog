@@ -35,7 +35,8 @@ public class BackendController {
         }
         ResultMsg msg = ResultMsg.successMsg("");
         blogService.postBlog(blog);
-        return "back/backend_write_blog";
+        msg.setSuccessMsg("博客发表成功");
+        return "redirect:/backend/write_blog?" + msg.asUrlParams();
     }
 
 }

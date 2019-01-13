@@ -11,4 +11,6 @@ import org.springframework.stereotype.Component;
 public interface BlogDao {
 
     public void insertBlog(Blog blog);
+
+
 }
