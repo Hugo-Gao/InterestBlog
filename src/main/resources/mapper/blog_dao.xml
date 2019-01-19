@@ -5,9 +5,17 @@
 <mapper namespace="com.gaoyunfan.dao.BlogDao">
 
     <insert id="insertBlog" useGeneratedKeys="true" keyProperty="id">
-        insert into blog(title, content, createTime, modifyTime)
-        values (#{title}, #{content}, #{createTime}, #{modifyTime})
+        insert into blog(title, content, createTime, modifyTime,digest)
+        values (#{title}, #{content}, #{createTime}, #{modifyTime},#{digest})
     </insert>
+    <select id="selectBlogList" resultType="com.gaoyunfan.model.Blog">
+        select id,title,digest,createTime from blog order by createTime desc
+        limit #{pageIndex},#{pageNum}
+    </select>
+    <select id="selectBlogNum" resultType="java.lang.Integer">
+        select count(*)
+        from blog;
+    </select>
 
 </mapper>
 

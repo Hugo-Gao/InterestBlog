@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,9 @@ public class UserService {
     @Autowired
     private StringRedisTemplate template;
 
+    @Value("${nginx.url}")
+    private String nginxUrl;
+
     /**
      * 从redis中获取已经注册的用户
      *
@@ -38,7 +42,9 @@ public class UserService {
         if (userStr == null) {
             return null;
         } else {
-            return JSON.parseObject(userStr, User.class);
+            User user = JSON.parseObject(userStr, User.class);
+            user.setAvaterPath(nginxUrl + user.getAvaterPath());
+            return user;
         }
     }
 

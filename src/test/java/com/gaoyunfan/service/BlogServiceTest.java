@@ -1,6 +1,7 @@
 package com.gaoyunfan.service;
 
 import com.gaoyunfan.model.Blog;
+import com.gaoyunfan.model.Pagination;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -30,5 +32,17 @@ public class BlogServiceTest {
         blog.setModifyTime(new Date());
         blog.setCreateTime(new Date());
         blogService.postBlog(blog);
+    }
+
+    @Test
+    public void selectPreBlogList() {
+        List<Blog> blogs = blogService.selectPreBlogList(new Pagination(1));
+        System.out.println(blogs);
+    }
+
+    @Test
+    public void getPageSum() {
+        int pageSum = blogService.getPageSum();
+        assert pageSum == 2;
     }
 }
