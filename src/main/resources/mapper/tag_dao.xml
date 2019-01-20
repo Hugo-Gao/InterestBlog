@@ -19,7 +19,11 @@
 
     <select id="selectTags" resultType="java.lang.String">
         select tag
-        from tag;
+        from tag
+        <if test="blogId >0">
+            where id in
+            (select tagId from blog_tag where blogId=#{blogId})
+        </if>
     </select>
 </mapper>
 

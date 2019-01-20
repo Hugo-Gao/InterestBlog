@@ -18,4 +18,6 @@ public interface BlogDao {
     List<Blog> selectBlogList(@Param("pageIndex") int pageIndex,@Param("pageNum") int pageNum);
 
     int selectBlogNum();
+
+    Blog selectOneBlog(int blogId);
 }

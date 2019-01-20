@@ -20,5 +20,5 @@ public class Blog {
     private List<String> tags;
     private String tagString;
     private String picUrl;
-
+    private String mdContent;
 }

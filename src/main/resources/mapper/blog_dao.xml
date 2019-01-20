@@ -16,6 +16,10 @@
         select count(*)
         from blog;
     </select>
+    <select id="selectOneBlog" resultType="com.gaoyunfan.model.Blog">
+        select id, title, content, createTime, modifyTime, digest from blog
+        where id = #{blogId}
+    </select>
 
 </mapper>
 

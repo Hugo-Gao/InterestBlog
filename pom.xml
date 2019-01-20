@@ -85,6 +85,21 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-actuator</artifactId>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.vladsch.flexmark</groupId>-->
+            <!--<artifactId>flexmark-all</artifactId>-->
+            <!--<version>0.40.8</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.markdownj</groupId>-->
+            <!--<artifactId>markdownj-core</artifactId>-->
+            <!--<version>0.4</version>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>com.youbenzi</groupId>
+            <artifactId>MDTool</artifactId>
+            <version>1.2.1</version>
+        </dependency>
     </dependencies>
 
     <build>

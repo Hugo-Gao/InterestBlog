@@ -30,13 +30,13 @@ public class TagDaoTest {
 
     @Test
     public void testSelect() {
-        List<String> tags = tagDao.selectTags();
+        List<String> tags = tagDao.selectTags(-1);
         assert tags.size() > 0;
     }
 
     @Test
     public void testInsertBlogTag() {
-        List<String> tags = tagDao.selectTags();
+        List<String> tags = tagDao.selectTags(-1);
         tagDao.insertBlogTag(tags,7);
     }
 

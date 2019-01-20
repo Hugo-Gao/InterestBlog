@@ -32,6 +32,7 @@
         <script src="/tabler/js/dashboard.js"></script>
         <!-- c3.js Charts Plugin -->
         <link href="/tabler/plugins/charts-c3/plugin.css" rel="stylesheet"/>
+        <link href="/css/markdown.css" rel="stylesheet"/>
         <script src="/tabler/plugins/charts-c3/plugin.js"></script>
         <!-- Google Maps Plugin -->
         <link href="/tabler/plugins/maps-google/plugin.css" rel="stylesheet"/>
@@ -40,5 +41,6 @@
         <script src="/tabler/plugins/input-mask/plugin.js"></script>
         <script src="/js/common.js"></script>
         <script src="/js/jquery-3.3.1.min.js"></script>
+
     </head>
 </#macro>

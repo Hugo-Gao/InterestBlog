@@ -45,4 +45,20 @@ public class BlogServiceTest {
         int pageSum = blogService.getPageSum();
         assert pageSum == 2;
     }
+
+    @Test
+    public void getBlogDetail() {
+        Blog blogDetail = blogService.getBlogDetail(13);
+        assertNotNull(blogDetail);
+    }
+
+    @Test
+    public void getTagList() {
+        List<String> tagList = blogService.getTagList(-1);
+        assert tagList.size() > 0;
+        System.out.println(tagList);
+        tagList = blogService.getTagList(13);
+        assert tagList.size() > 0;
+        System.out.println(tagList);
+    }
 }

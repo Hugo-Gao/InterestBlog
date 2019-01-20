@@ -10,7 +10,7 @@ import java.util.List;
  **/
 @Mapper
 public interface TagDao {
-    public List<String> selectTags();
+    public List<String> selectTags(@Param("blogId") int blogId);
 
     void insertTags(List<String> insertTags);
 
