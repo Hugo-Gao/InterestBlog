@@ -93,7 +93,7 @@ public class BlogService {
         if (blog == null) {
             return null;
         }
-        renderMD(blog.getContent());
+        blog.setMdContent(renderMD(blog.getContent()));
         return blog;
     }
 
@@ -102,9 +102,8 @@ public class BlogService {
      *
      * @param content
      */
-    private void renderMD(String content) {
-        String html = MDTool.markdown2Html(content);
-        System.out.println(html);
+    private String renderMD(String content) {
+        return MDTool.markdown2Html(content);
     }
 
     public List<String> getTagList(int blogId) {

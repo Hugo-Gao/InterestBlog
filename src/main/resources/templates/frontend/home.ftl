@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 <@common.header/>
 
-<body class="">
+<body>
 <div class="page">
     <div class="page-main">
         <div class="header py-4">
@@ -76,15 +76,15 @@
                     <#list blogList as blog>
                         <div class="col-lg-6">
                             <div class="card card-aside">
-                                <a href="#" class="card-aside-column"
+                                <a href="./blog/${blog.id}" class="card-aside-column"
                                    style="background-image: url(${blog.picUrl})"></a>
                                 <div class="card-body d-flex flex-column">
-                                    <h4><a href="#">${blog.title}</a></h4>
+                                    <h4><a href="./blog/${blog.id}">${blog.title}</a></h4>
                                     <div class="text-muted">${blog.digest}
                                     </div>
                                     <div class="d-flex align-items-center pt-5 mt-auto">
                                         <div>
-                                            <#--<small class="d-block text-muted">${blog.createTime}</small>-->
+                                            <small class="d-block text-muted">${blog.createTime?string('yyyy-MM-dd HH:mm')}</small>
                                         </div>
                                         <div class="ml-auto text-muted">
                                             <a href="javascript:void(0)" class="icon d-none d-md-inline-block ml-3"><i
@@ -122,15 +122,6 @@
             <#list  page..max as i>
                 <li class="page-item <#if i==page>active</#if>"><a class="page-link" href=".?page=${i}">${i}</a></li>
             </#list>
-
-            <#--<li class="page-item <#if page==1>active</#if>"><a class="page-link" href="#">-->
-            <#--<#if page==1>1</#if>-->
-            <#--<#if page!=1>${page-1}</#if>-->
-            <#--</a></li>-->
-            <#--<li class="page-item <#if page!=1>active</#if>"><a class="page-link" href="#">2</a></li>-->
-            <#--<li class="page-item"><a class="page-link" href="#">3</a></li>-->
-            <#--<li class="page-item"><a class="page-link" href="#">4</a></li>-->
-            <#--<li class="page-item"><a class="page-link" href="#">5</a></li>-->
             <li class="page-item page-next <#if page==pageSum> disabled </#if>">
                 <a class="page-link" href=".?page=${page+1}">
                     Next

@@ -26,16 +26,17 @@ public class BlogController {
 
     @RequestMapping("/blog/{blogId}")
     public String getMessage(@PathVariable("blogId") int blogId, ModelMap modelMap) {
-//        Blog blogDetail = blogService.getBlogDetail(blogId);
-//        if(blogDetail==null){
-//            ResultMsg msg = ResultMsg.errorMsg("该博客不存在");
-//            return "redirect:/?" + msg.asUrlParams();
-//        }
-//        List<String> tagList = blogService.getTagList(blogId);
-//        User user = userService.getUser();
-//        modelMap.put("blog", blogDetail);
-//        modelMap.put("tagList", tagList);
-//        modelMap.put("user", user);
+        Blog blogDetail = blogService.getBlogDetail(blogId);
+        if(blogDetail==null){
+            ResultMsg msg = ResultMsg.errorMsg("该博客不存在");
+            return "redirect:/?" + msg.asUrlParams();
+        }
+        List<String> tagList = blogService.getTagList(blogId);
+        User user = userService.getUser();
+        modelMap.put("blog", blogDetail);
+        modelMap.put("tagList", tagList);
+        modelMap.put("user", user);
+        System.out.println(blogDetail.getMdContent());
         return "blog/blog_detail";
     }
 }
