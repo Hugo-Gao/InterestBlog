@@ -20,4 +20,6 @@ public interface BlogDao {
     int selectBlogNum();
 
     Blog selectOneBlog(int blogId);
+
+    List<Blog> selectBlogListByTag(int tagId);
 }

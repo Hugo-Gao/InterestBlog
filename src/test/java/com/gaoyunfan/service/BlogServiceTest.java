@@ -2,6 +2,7 @@ package com.gaoyunfan.service;
 
 import com.gaoyunfan.model.Blog;
 import com.gaoyunfan.model.Pagination;
+import com.gaoyunfan.model.Tag;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,11 +55,17 @@ public class BlogServiceTest {
 
     @Test
     public void getTagList() {
-        List<String> tagList = blogService.getTagList(-1);
+        List<Tag> tagList = blogService.getTagList(-1);
         assert tagList.size() > 0;
         System.out.println(tagList);
         tagList = blogService.getTagList(13);
         assert tagList.size() > 0;
         System.out.println(tagList);
+    }
+
+    @Test
+    public void getBlogByTag() {
+        List<Blog> blogByTag = blogService.getBlogByTag(9);
+        System.out.println(blogByTag);
     }
 }

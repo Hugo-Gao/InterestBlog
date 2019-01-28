@@ -17,13 +17,16 @@
         </foreach>
     </insert>
 
-    <select id="selectTags" resultType="java.lang.String">
-        select tag
+    <select id="selectTags" resultType="com.gaoyunfan.model.Tag">
+        select id,tag
         from tag
         <if test="blogId >0">
             where id in
             (select tagId from blog_tag where blogId=#{blogId})
         </if>
+    </select>
+    <select id="selectTagById" resultType="java.lang.String">
+        select tag from tag where id=#{id}
     </select>
 </mapper>
 

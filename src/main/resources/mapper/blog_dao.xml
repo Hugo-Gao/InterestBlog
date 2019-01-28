@@ -20,6 +20,10 @@
         select id, title, content, createTime, modifyTime, digest from blog
         where id = #{blogId}
     </select>
+    <select id="selectBlogListByTag" resultType="com.gaoyunfan.model.Blog">
+        select id, title, content, createTime, modifyTime, digest from blog
+        where id in (select blogId from blog_tag where tagId=#{tagId})
+    </select>
 
 </mapper>
 

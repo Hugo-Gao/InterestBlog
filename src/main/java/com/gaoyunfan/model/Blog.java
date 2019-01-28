@@ -18,6 +18,7 @@ public class Blog {
     private Date modifyTime;
     private List<Comment> comments;
     private List<String> tags;
+    private List<Tag> tagList;
     private String tagString;
     private String picUrl;
     private String mdContent;

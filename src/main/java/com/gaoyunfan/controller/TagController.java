@@ -1,10 +1,10 @@
 package com.gaoyunfan.controller;
 
-import com.gaoyunfan.dto.ResultMsg;
 import com.gaoyunfan.model.Blog;
 import com.gaoyunfan.model.Tag;
 import com.gaoyunfan.model.User;
 import com.gaoyunfan.service.BlogService;
+import com.gaoyunfan.service.TagService;
 import com.gaoyunfan.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,25 +18,34 @@ import java.util.List;
  * @author yunfan.gyf
  **/
 @Controller
-public class BlogController {
+@RequestMapping("tags")
+public class TagController {
+    @Autowired
+    private UserService userService;
+
     @Autowired
     private BlogService blogService;
 
     @Autowired
-    private UserService userService;
+    private TagService tagService;
 
-    @RequestMapping("/blog/{blogId}")
-    public String getMessage(@PathVariable("blogId") int blogId, ModelMap modelMap) {
-        Blog blogDetail = blogService.getBlogDetail(blogId);
-        if(blogDetail==null){
-            ResultMsg msg = ResultMsg.errorMsg("该博客不存在");
-            return "redirect:/?" + msg.asUrlParams();
-        }
-        List<Tag> tagList = blogService.getTagList(blogId);
+    @RequestMapping("")
+    public String tagPage(ModelMap modelMap) {
         User user = userService.getUser();
-        modelMap.put("blog", blogDetail);
-        modelMap.put("tagList", tagList);
+        List<Tag> tagList = blogService.getTagList(-1);
         modelMap.put("user", user);
-        return "blog/blog_detail";
+        modelMap.put("tagList", tagList);
+        return "frontend/tag";
+    }
+
+    @RequestMapping("{tagId}")
+    public String tagDetail(@PathVariable int tagId,ModelMap modelMap) {
+        User user = userService.getUser();
+        List<Blog> blogList = blogService.getBlogByTag(tagId);
+        String tag = tagService.getTagById(tagId);
+        modelMap.put("user", user);
+        modelMap.put("blogList", blogList);
+        modelMap.put("tag", tag);
+        return "frontend/tag_detail";
     }
 }

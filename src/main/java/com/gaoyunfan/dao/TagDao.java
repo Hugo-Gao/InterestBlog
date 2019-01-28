@@ -1,5 +1,6 @@
 package com.gaoyunfan.dao;
 
+import com.gaoyunfan.model.Tag;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -10,7 +11,9 @@ import java.util.List;
  **/
 @Mapper
 public interface TagDao {
-    public List<String> selectTags(@Param("blogId") int blogId);
+    public List<Tag> selectTags(@Param("blogId") int blogId);
+
+    String selectTagById(int id);
 
     void insertTags(List<String> insertTags);
 

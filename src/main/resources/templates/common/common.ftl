@@ -1,7 +1,7 @@
 <#macro header>
     <head>
         <title>InterestBlog</title>
-        <link rel="shortcut icon" type="image/x-icon" href="/img/logo.ico" media="screen" />
+        <link rel="shortcut icon" type="image/x-icon" href="/img/logo.ico"/>
         <meta charset="UTF-8">
         <meta name="viewport"
               content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -90,7 +90,7 @@
 </#macro>
 
 
-<#macro head_tab>
+<#macro head_tab tab>
     <div class="header py-4">
         <div class="container">
             <div class="d-flex">
@@ -131,19 +131,48 @@
                 <div class="col-lg order-lg-first">
                     <ul class="nav nav-tabs border-0 flex-column flex-lg-row">
                         <li class="nav-item">
-                            <a href="../" class="nav-link active"><i class="fe fe-home"></i> 首页</a>
+                            <#if tab == 'home'>
+                                <a href="../" class="nav-link active"><i class="fe fe-home"></i> 首页</a>
+                            </#if>
+                            <#if tab != 'home'>
+                                <a href="../" class="nav-link"><i class="fe fe-home"></i> 首页</a>
+                            </#if>
                         </li>
                         <li class="nav-item dropdown">
-                            <a href="../tags" class="nav-link" data-toggle="dropdown"><i
-                                        class="fe fe-tag"></i> Tags</a>
+                            <#if tab=='tags'>
+                                <a href="../tags" class="nav-link active" data-toggle="dropdown"><i
+                                            class="fe fe-tag"></i> Tags</a>
+                            </#if>
+                            <#if tab!='tags'>
+                                <a href="../tags" class="nav-link" data-toggle="dropdown"><i
+                                            class="fe fe-tag"></i> Tags</a>
+                            </#if>
                         </li>
                         <li class="nav-item dropdown">
-                            <a href="../aboutme" class="nav-link" data-toggle="dropdown"><i
-                                        class="fe fe-user"></i> 关于我</a>
+                            <#if tab=='aboutme'>
+                                <a href="../aboutme" class="nav-link active" data-toggle="dropdown"><i
+                                            class="fe fe-user"></i> 关于我</a>
+                            </#if>
+                            <#if tab!='aboutme'>
+                                <a href="../aboutme" class="nav-link" data-toggle="dropdown"><i
+                                            class="fe fe-user"></i> 关于我</a>
+                            </#if>
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
+</#macro>
+
+<#macro footer>
+    <footer class="footer">
+        <div class="container">
+            <div style="text-align: center">
+                <div class="col-12 col-lg-auto mt-3 mt-lg-0 text-center">
+                    Copyright © 2019 <a href=".">Hugo-Gao</a>. Theme by <a href="https://tabler.io/" target="_blank">Tabler</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 </#macro>

@@ -1,5 +1,6 @@
 package com.gaoyunfan.dao;
 
+import com.gaoyunfan.model.Tag;
 import com.google.common.collect.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,14 +31,10 @@ public class TagDaoTest {
 
     @Test
     public void testSelect() {
-        List<String> tags = tagDao.selectTags(-1);
+        List<Tag> tags = tagDao.selectTags(-1);
         assert tags.size() > 0;
     }
 
-    @Test
-    public void testInsertBlogTag() {
-        List<String> tags = tagDao.selectTags(-1);
-        tagDao.insertBlogTag(tags,7);
-    }
+
 
 }

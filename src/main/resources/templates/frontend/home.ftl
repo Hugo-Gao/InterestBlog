@@ -5,7 +5,7 @@
 <body>
 <div class="page">
     <div class="page-main">
-       <@common.head_tab />
+       <@common.head_tab tab='home'/>
         <div class="my-3 my-md-5">
             <div class="container">
                 <div class="page-header">
@@ -71,15 +71,7 @@
             </li>
         </ul>
     </div>
-    <footer class="footer">
-        <div class="container">
-            <div style="text-align: center">
-                <div class="col-12 col-lg-auto mt-3 mt-lg-0 text-center">
-                    Copyright © 2019 <a href=".">Hugo-Gao</a>. Theme by <a href="https://tabler.io/" target="_blank">Tabler</a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <@common.footer/>
 </div>
 </body>
 </html>
