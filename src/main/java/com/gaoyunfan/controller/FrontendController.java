@@ -44,5 +44,9 @@ public class FrontendController {
         return "frontend/home";
     }
 
+    @RequestMapping("aboutme")
+    public String aboutme() {
+        return "frontend/aboutme";
+    }
 
 }

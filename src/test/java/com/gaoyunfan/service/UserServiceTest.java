@@ -1,5 +1,6 @@
 package com.gaoyunfan.service;
 
+import com.gaoyunfan.dto.ResultMsg;
 import com.gaoyunfan.model.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,7 +32,8 @@ public class UserServiceTest {
         user.setEmail("598335769@qq.com");
         user.setPassword("123456");
         user.setAboutme("This is a test");
-        userService.addUser(user, null);
+        user.setAvaterPath("/1546335187/WechatIMG1.jpeg");
+        userService.addUser(user, ResultMsg.successMsg(""),false);
     }
 
     @Test
@@ -42,6 +44,6 @@ public class UserServiceTest {
     public void updateUser() {
         User user = new User();
         user.setAboutme("This is a new test ");
-        userService.updateUser(user,null);
+        userService.updateUser(user, null);
     }
 }

@@ -22,6 +22,7 @@ public class FileService {
 
     /**
      * 对每个图片文件，都保存到本地，并且返回相对路径集合
+     *
      * @param files
      * @return
      */
@@ -32,12 +33,12 @@ public class FileService {
             if (!file.isEmpty()) {
                 try {
                     localFile = saveToLocal(file, filePath);
-                    //去除相对路径
                     String path = StringUtils.substringAfterLast(localFile.getAbsolutePath(), filePath);
                     paths.add(path);
-                } catch (Exception e) {
-                    throw new IllegalArgumentException(e);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+                //去除相对路径
             }
         }
         return paths;

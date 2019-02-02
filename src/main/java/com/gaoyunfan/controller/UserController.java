@@ -13,6 +13,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * @author yunfan.gyf
@@ -50,7 +51,7 @@ public class UserController {
     }
 
     @RequestMapping("/register")
-    public String register(HttpServletResponse response, ModelMap modelMap, User user) {
+    public String register(HttpServletResponse response, ModelMap modelMap, User user) throws IOException {
         //如果没有携带user，则直接返回注册界面
         if (user == null || user.getEmail() == null) {
             System.out.println("----register-----");
@@ -62,7 +63,7 @@ public class UserController {
         }
         //如果携带有user，则进行注册
         ResultMsg msg = UserHelper.validate(user);
-        if (msg.isSuccess() && userService.addUser(user, msg)) {
+        if (msg.isSuccess() && userService.addUser(user, msg,true)) {
             modelMap.put("avaterPath", user.getAvaterPath());
             modelMap.put("email", user.getEmail());
             logger.debug("user " + user + " 储存成功");
