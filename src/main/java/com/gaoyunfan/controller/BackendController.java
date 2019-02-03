@@ -57,7 +57,7 @@ public class BackendController {
             ResultMsg msg = ResultMsg.successMsg("");
             userService.updateUser(user,msg);
             User updateUser = userService.getUser();
-            modelMap.put("resultMsg", msg);
+            modelMap.put("successMsg", "更新成功");
             modelMap.put("user", updateUser);
             return "back/aboutme";
         }

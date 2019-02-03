@@ -1,6 +1,6 @@
 #blog {
     font-family: "Microsoft Yahei", Helvetica, arial, sans-serif ;
-    font-size: 14px;
+    font-size: 15px;
     line-height: 1.6;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -85,7 +85,7 @@ h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor, h5:h
 
 #blog p, #blog blockquote, #blog ul, #blog ol, #blog dl, #blog li, #blog table, #blog pre {
     margin: 15px 0;
-    font-size: 16px;
+    font-size: 18px;
     color: #516272;  }
 
 #blog hr {

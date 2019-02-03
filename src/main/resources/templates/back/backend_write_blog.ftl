@@ -17,7 +17,7 @@
                                 <#if successMsg??>
                                     <div class="alert alert-success alert-dismissible test">
                                         <button  type="button" class="close" data-dismiss="alert"></button>
-                                        Hello
+                                        ${successMsg}
                                     </div>
                                 </#if>
                                 <#if errorMsg??>

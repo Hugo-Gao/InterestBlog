@@ -7,9 +7,9 @@
     <div class="page-main">
         <@common.head_tab tab="home"/>
         <div class="my-3 my-md-5" id="blog">
-            <div class="container col-lg-10">
+            <div class="container col-lg-8">
                 <div class="card">
-                    <div style="text-align: center;margin-bottom: 10dp">
+                    <div style="text-align: center">
                         <h1 class="card-title">${blog.title}</h1>
                         <#list tagList as tag>
                             <button onclick="window.location.href='../tags/${tag.id}'" class="btn btn-primary btn-sm ${tag.style}">${tag.tag}</button>

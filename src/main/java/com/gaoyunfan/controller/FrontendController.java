@@ -45,7 +45,9 @@ public class FrontendController {
     }
 
     @RequestMapping("aboutme")
-    public String aboutme() {
+    public String aboutme(ModelMap modelMap) {
+        User user = userService.getUser();
+        modelMap.put("user", user);
         return "frontend/aboutme";
     }
 

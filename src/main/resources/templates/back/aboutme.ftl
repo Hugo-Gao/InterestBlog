@@ -8,7 +8,20 @@
         <@common.backend_tab tab='aboutme'/>
         <div class="my-3 my-md-5">
             <div class="container">
+                <#if successMsg??>
+                    <div class="alert alert-success alert-dismissible test">
+                        <button  type="button" class="close" data-dismiss="alert"></button>
+                        ${successMsg}
+                    </div>
+                </#if>
+                <#if errorMsg??>
+                    <div class="alert alert-error alert-dismissible test">
+                        <button type="button" class="close" data-dismiss="alert"></button>
+                        ${errorMsg}
+                    </div>
+                </#if>
                 <div class="row">
+
                     <div class="col-lg-4">
                         <script>
                             require(['input-mask']);
@@ -80,7 +93,7 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label class="form-label">公司</label>
+                                            <label class="form-label">公司及职位</label>
                                             <input type="text" class="form-control" placeholder="Company" name="company" value="${user.company!}">
                                         </div>
                                     </div>
@@ -122,7 +135,7 @@
     $(".close").click(function ()
     {
         $(".test").hide();
-    })
+    });
 
     var
         fileInput = document.getElementById('test-image-file'),
