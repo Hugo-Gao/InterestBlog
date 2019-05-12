@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -38,6 +39,7 @@ public class UserService {
      *
      * @return
      */
+    @Transactional
     public User getUser() {
         String userStr = template.opsForValue().get(USER_KEY);
         if (userStr == null) {

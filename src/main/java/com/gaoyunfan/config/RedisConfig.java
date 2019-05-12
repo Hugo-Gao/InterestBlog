@@ -1,11 +1,20 @@
 package com.gaoyunfan.config;
 
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.support.collections.RedisProperties;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+
+
+import javax.sql.DataSource;
+import java.io.Serializable;
+import java.sql.SQLException;
 
 /**
  * @author yunfan.gyf
@@ -18,10 +27,22 @@ public class RedisConfig {
      * @return
      */
     @Bean
-    public StringRedisTemplate customStringRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        StringRedisTemplate template = new StringRedisTemplate();
-        template.setConnectionFactory(redisConnectionFactory);
-        template.setEnableTransactionSupport(true);
-        return template;
+    public RedisTemplate<String, Serializable> redisTemplate(LettuceConnectionFactory connectionFactory) {
+//    public StringRedisTemplate redisTemplate(RedisConnectionFactory connectionFactory) {
+//        StringRedisTemplate template = new StringRedisTemplate();
+//        template.setConnectionFactory(connectionFactory);
+//        template.setEnableTransactionSupport(true);
+//        return template;
+        RedisTemplate<String, Serializable> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        redisTemplate.setConnectionFactory(connectionFactory);
+        redisTemplate.setEnableTransactionSupport(true);
+        return redisTemplate;
     }
+
+//    @Bean
+//    public PlatformTransactionManager transactionManager(DataSource dataSource) throws SQLException {
+//        return new DataSourceTransactionManager(dataSource);
+//    }
 }

@@ -18,4 +18,8 @@ public interface TagDao {
     void insertTags(List<String> insertTags);
 
     void insertBlogTag(@Param("list") List<String> insertTags, @Param("blogId") Integer blogId);
+
+    void deleteBlogTag(String blogId);
+
+    int selectTagNum();
 }

@@ -8,6 +8,9 @@
         insert into blog(title, content, createTime, modifyTime,digest)
         values (#{title}, #{content}, #{createTime}, #{modifyTime},#{digest})
     </insert>
+    <delete id="deleteBlog">
+        delete from blog where id=#{blogId}
+    </delete>
     <select id="selectBlogList" resultType="com.gaoyunfan.model.Blog">
         select id,title,digest,createTime from blog order by createTime desc
         limit #{pageIndex},#{pageNum}

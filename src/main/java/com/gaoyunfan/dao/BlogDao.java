@@ -22,4 +22,6 @@ public interface BlogDao {
     Blog selectOneBlog(int blogId);
 
     List<Blog> selectBlogListByTag(int tagId);
+
+    void deleteBlog(String blogId);
 }

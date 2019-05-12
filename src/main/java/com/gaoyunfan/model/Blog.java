@@ -22,4 +22,5 @@ public class Blog {
     private String tagString;
     private String picUrl;
     private String mdContent;
+    private int views;
 }

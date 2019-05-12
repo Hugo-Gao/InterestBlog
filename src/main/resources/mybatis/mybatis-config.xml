@@ -17,6 +17,6 @@
     <mappers>
         <mapper resource="mapper/blog_dao.xml"/>
         <mapper resource="mapper/tag_dao.xml"/>
-
+        <mapper resource="mapper/comment_dao.xml"/>
     </mappers>
 </configuration>

@@ -48,6 +48,9 @@ public class AuthInterceptor implements HandlerInterceptor {
         String email = CookieUtil.getCookie(httpServletRequest, "user_cookie");
         if (email != null) {
             User user = userService.getUser();
+            if (user == null) {
+                throw new RuntimeException("没有注册");
+            }
             if (user.getEmail().equals(email)) {
                 UserContext.setUser(user);
             }

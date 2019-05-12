@@ -45,6 +45,8 @@
         <script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="core"
                 src="/tabler/js/core.js"></script>
         <script src="/js/jquery-3.3.1.min.js"></script>
+        <link href="https://cdn.bootcss.com/jquery-confirm/3.2.3/jquery-confirm.min.css" rel="stylesheet">
+        <script src="https://cdn.bootcss.com/jquery-confirm/3.2.3/jquery-confirm.min.js "></script>
 
         <#--<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>-->
         <#--<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>-->

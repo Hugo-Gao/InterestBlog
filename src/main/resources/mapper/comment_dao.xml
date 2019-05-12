@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gaoyunfan.dao.CommentDao">
+
+    <insert id="addComment" useGeneratedKeys="true" keyProperty="id">
+       insert into comment( nickname, content, create_time)
+       values (#{nickname},#{content},#{createTime})
+    </insert>
+
+    <insert id="addCommentIdAndBlogId" >
+        insert into comment_blog(blog_id, comment_id)
+        values (#{blogId},#{id})
+    </insert>
+    <delete id="deleteComment">
+        delete from comment where id in (
+            select comment_id from comment_blog where blog_id=#{blogId}
+            )
+    </delete>
+    <delete id="deleteCommentBlog">
+        delete from comment_blog where blog_id=#{blogId}
+    </delete>
+    <select id="selectComment" resultType="com.gaoyunfan.model.Comment">
+        select id, nickname, content, create_time from comment where id in (
+            select comment_id from comment_blog where blog_id = (#{blogId})
+            ) order by create_time DESC;
+    </select>
+    <select id="selectCommentNum" resultType="int">
+        select count(*) from comment_blog
+        <if test="blogId > 0">
+            where blog_id=#{blogId}
+        </if>
+    </select>
+
+</mapper>
+

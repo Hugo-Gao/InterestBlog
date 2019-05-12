@@ -16,6 +16,9 @@
             ((select id from tag where tag=#{tag}),#{blogId})
         </foreach>
     </insert>
+    <delete id="deleteBlogTag">
+        delete from blog_tag where blogId=#{blogId}
+    </delete>
 
     <select id="selectTags" resultType="com.gaoyunfan.model.Tag">
         select id,tag
@@ -27,6 +30,9 @@
     </select>
     <select id="selectTagById" resultType="java.lang.String">
         select tag from tag where id=#{id}
+    </select>
+    <select id="selectTagNum" resultType="java.lang.Integer">
+        select count(*) from tag
     </select>
 </mapper>
 

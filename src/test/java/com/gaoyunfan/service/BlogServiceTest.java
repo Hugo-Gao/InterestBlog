@@ -3,6 +3,7 @@ package com.gaoyunfan.service;
 import com.gaoyunfan.model.Blog;
 import com.gaoyunfan.model.Pagination;
 import com.gaoyunfan.model.Tag;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,5 +68,47 @@ public class BlogServiceTest {
     public void getBlogByTag() {
         List<Blog> blogByTag = blogService.getBlogByTag(9);
         System.out.println(blogByTag);
+    }
+
+    @Test
+    public void increAndGetBlogView() {
+        String selectKey = "*_*_*_" + 21;
+//         blogService.getBlogView(selectKey);
+    }
+
+    @Test
+    public void deleteBlog() {
+        blogService.deleteBlogView(19);
+        int blogView = blogService.getBlogView(19);
+        Assert.assertEquals(blogView,0);
+    }
+
+    @Test
+    public void getSumView() {
+        int blogSumView = blogService.getBlogSumView();
+        Assert.assertNotEquals(blogSumView, 0);
+    }
+
+    @Test
+    public void getBlogNum() {
+    }
+
+    @Test
+    public void getBlogView() {
+    }
+
+    @Test
+    public void getBlogSumView() {
+    }
+
+    @Test
+    public void deleteBlogView() {
+    }
+
+    @Test
+    public void getTagNum() {
+        int tagNum = blogService.getTagNum();
+        System.out.println(tagNum);
+        Assert.assertNotEquals(tagNum,0);
     }
 }

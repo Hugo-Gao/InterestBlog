@@ -2,14 +2,16 @@ package com.gaoyunfan.model;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @author yunfan.gyf
  **/
 @Data
 public class Comment {
     private int id;
-    private String email;
+    private int blogId;
+    private String nickname;
     private String content;
-    private String createTime;
-    private int replyId;
+    private Date createTime;
 }

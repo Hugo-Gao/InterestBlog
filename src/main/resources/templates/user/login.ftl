@@ -42,13 +42,20 @@
 
     $(document).ready(function ()
     {
+
         var errorMsg = getUrlParam("errorMsg");
         var successMsg = getUrlParam("successMsg");
+
         if (errorMsg) {
-            errormsg("error", errorMsg);
+            $.alert({
+                content: errorMsg
+            });
         }
         if (successMsg) {
-            successmsg("success", successMsg);
+            // successmsg("success", successMsg);
+            $.alert({
+                content: errorMsg
+            });
         }
     });
 </script>
