@@ -19,14 +19,12 @@
                                 <i class="fe fe-eye mr-1"></i> ${views}
                             </a>
                         </div>
-
                     </div>
                     <div class="card-body" style="margin-left: 30px;margin-right: 30px">
                         ${blog.mdContent}
                     </div>
                 </div>
             </div>
-
 
             <div class="container col-lg-9">
                 <div class="card">
@@ -70,5 +68,18 @@
     <@common.footer/>
 
 </div>
+<script type="text/javascript">
+    $("#searchInput").blur(function ()
+        {
+            console.log("失去焦点");
+            setTimeout(function ()
+            {
+                $("#searchDialog").removeClass("show");
+                $("#searchDialog").empty()
+            }, 200)
+
+        }
+    )
+</script>
 </body>
 </html>

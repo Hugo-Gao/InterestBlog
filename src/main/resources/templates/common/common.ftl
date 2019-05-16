@@ -110,12 +110,12 @@
                 </a>
                 <div class="d-flex order-lg-2 ml-auto">
                     <div class="dropdown">
-                        <a href="#" class="nav-link pr-0 leading-none" data-toggle="dropdown">
+                        <a href="/aboutme" class="nav-link pr-0 leading-none" data-toggle="dropdown">
                             <span class="avatar" style="background-image: url(${user.avaterPath})"></span>
                             <span class="ml-2 d-none d-lg-block">
                                      <span class="text-default">${user.email}</span>
                                      <small class="text-muted d-block mt-1">博主</small>
-                                </span>
+                            </span>
                         </a>
                     </div>
                 </div>
@@ -131,13 +131,24 @@
             <div class="row align-items-center">
                 <div class="col-lg-3 ml-auto">
                     <form class="input-icon my-3 my-lg-0">
-                        <input type="search" class="form-control header-search" placeholder="Search&hellip;"
+                        <input id="searchInput" onclick="searchForBlog()" type="search" class="form-control header-search" placeholder="Search&hellip;"
                                tabindex="1">
                         <div class="input-icon-addon">
                             <i class="fe fe-search"></i>
                         </div>
                     </form>
+                    <div  id="searchDialog" class="dropdown-menu dropdown-menu-arrow" x-placement="bottom-start" style="position: absolute; transform: translate3d(12px, 55px, 0px); top: -10px; left: 0px; will-change: transform;">
+<#--                        <div  class="dropdown-item " style="width: 300px">-->
+<#--                            <div>-->
+<#--                                <a href="./cards.html" class="">《Java虚拟机类加载机制》</a>-->
+<#--                            </div>-->
+<#--                            <div>-->
+<#--                                <p href="./cards.html" class="" style="overflow-x: scroll;">暗示阿萨德奥术大师上的阿萨德阿萨德阿萨德啊暗示暗示</p>-->
+<#--                            </div>-->
+<#--                        </div>-->
+                    </div>
                 </div>
+
                 <div class="col-lg order-lg-first">
                     <ul class="nav nav-tabs border-0 flex-column flex-lg-row">
                         <li class="nav-item">
@@ -185,7 +196,7 @@
                 </a>
                 <div class="d-flex order-lg-2 ml-auto">
                     <div class="dropdown">
-                        <a href="#" class="nav-link pr-0 leading-none" data-toggle="dropdown">
+                        <a href="/aboutme" class="nav-link pr-0 leading-none" data-toggle="dropdown">
                             <span class="avatar" style="background-image: url(${user.avaterPath})"></span>
                             <span class="ml-2 d-none d-lg-block">
                                      <span class="text-default">${user.email}</span>

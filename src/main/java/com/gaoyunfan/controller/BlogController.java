@@ -1,5 +1,6 @@
 package com.gaoyunfan.controller;
 
+import com.gaoyunfan.dao.BlogElasticDao;
 import com.gaoyunfan.dto.ResultMsg;
 import com.gaoyunfan.model.Blog;
 import com.gaoyunfan.model.Comment;
@@ -33,6 +34,7 @@ public class BlogController {
 
     @Autowired
     private CommentService commentService;
+
 
 
     /**
@@ -81,6 +83,8 @@ public class BlogController {
         commentService.addComment(comment);
         return "redirect:/blog/" + blogId;
     }
+
+
 
 
 }

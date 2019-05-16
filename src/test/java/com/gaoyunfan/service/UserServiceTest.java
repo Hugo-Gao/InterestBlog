@@ -31,7 +31,7 @@ public class UserServiceTest {
         User user = new User();
         user.setEmail("598335769@qq.com");
         user.setPassword("123456");
-        user.setAboutme("This is a test");
+        user.setAboutme("This is a testSave");
         user.setAvaterPath("/1546335187/WechatIMG1.jpeg");
         userService.addUser(user, ResultMsg.successMsg(""),false);
     }
@@ -43,7 +43,7 @@ public class UserServiceTest {
     @Test
     public void updateUser() {
         User user = new User();
-        user.setAboutme("This is a new test ");
+        user.setAboutme("This is a new testSave ");
         userService.updateUser(user, null);
     }
 }

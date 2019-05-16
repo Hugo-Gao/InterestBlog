@@ -24,4 +24,8 @@ public interface BlogDao {
     List<Blog> selectBlogListByTag(int tagId);
 
     void deleteBlog(String blogId);
+
+    List<Blog> selectBlogListByComment();
+
+    List<Blog> selectAllBlog();
 }

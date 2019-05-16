@@ -5,32 +5,53 @@
 <mapper namespace="com.gaoyunfan.dao.CommentDao">
 
     <insert id="addComment" useGeneratedKeys="true" keyProperty="id">
-       insert into comment( nickname, content, create_time)
-       values (#{nickname},#{content},#{createTime})
+        insert into comment(nickname, content, create_time)
+        values (#{nickname}, #{content}, #{createTime})
     </insert>
 
-    <insert id="addCommentIdAndBlogId" >
+    <insert id="addCommentIdAndBlogId">
         insert into comment_blog(blog_id, comment_id)
-        values (#{blogId},#{id})
+        values (#{blogId}, #{id})
     </insert>
     <delete id="deleteComment">
-        delete from comment where id in (
-            select comment_id from comment_blog where blog_id=#{blogId}
-            )
+        delete
+        from comment
+        where id in (
+            select comment_id
+            from comment_blog
+            where blog_id = #{blogId}
+        )
     </delete>
     <delete id="deleteCommentBlog">
-        delete from comment_blog where blog_id=#{blogId}
+        delete
+        from comment_blog
+        where blog_id = #{blogId}
     </delete>
     <select id="selectComment" resultType="com.gaoyunfan.model.Comment">
-        select id, nickname, content, create_time from comment where id in (
-            select comment_id from comment_blog where blog_id = (#{blogId})
-            ) order by create_time DESC;
+        select id, nickname, content, create_time
+        from comment
+        where id in (
+            select comment_id
+            from comment_blog
+            where blog_id = (#{blogId})
+        )
+        order by create_time DESC;
     </select>
     <select id="selectCommentNum" resultType="int">
         select count(*) from comment_blog
         <if test="blogId > 0">
             where blog_id=#{blogId}
         </if>
+    </select>
+    <select id="selectNewestComment" resultType="com.gaoyunfan.model.Comment">
+        select blog_id, c.content, create_time, nickname,title as blogTitle
+        from comment c
+        left join comment_blog cb
+        on c.id = cb.comment_id
+        left join blog b
+        on cb.blog_id=b.id
+        order by create_time DESC
+        limit 6
     </select>
 
 </mapper>

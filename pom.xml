@@ -8,23 +8,19 @@
         <version>2.1.4.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+    <packaging>jar</packaging>
     <groupId>com.gaoyunfan</groupId>
     <artifactId>InterestBlog</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>InterestBlog</name>
     <description>Interesting Blog System</description>
 
     <properties>
         <java.version>1.8</java.version>
+        <elasticsearch.version>6.1.1</elasticsearch.version>
     </properties>
 
     <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>redis.clients</groupId>-->
-<!--            <artifactId>jedis</artifactId>-->
-<!--            <version>2.9.0</version>-->
-<!--        </dependency>-->
-
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
@@ -106,6 +102,10 @@
             <groupId>com.youbenzi</groupId>
             <artifactId>MDTool</artifactId>
             <version>1.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
         </dependency>
     </dependencies>
 

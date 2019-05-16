@@ -1,7 +1,7 @@
 package com.gaoyunfan.service;
 
-import cn.hutool.core.date.DateUtil;
 import com.gaoyunfan.dao.BlogDao;
+import com.gaoyunfan.dao.BlogElasticDao;
 import com.gaoyunfan.dao.CommentDao;
 import com.gaoyunfan.dao.TagDao;
 import com.gaoyunfan.model.Blog;
@@ -9,22 +9,28 @@ import com.gaoyunfan.model.Pagination;
 import com.gaoyunfan.model.Tag;
 import com.google.common.collect.Lists;
 import com.youbenzi.mdtool.tool.MDTool;
-import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.core.Cursor;
-import org.springframework.data.redis.core.RedisConnectionUtils;
-import org.springframework.data.redis.core.ScanOptions;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.SearchResultMapper;
+import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
+import org.springframework.data.elasticsearch.core.aggregation.impl.AggregatedPageImpl;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+
+import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
 
 /**
  * @author yunfan.gyf
@@ -46,8 +52,28 @@ public class BlogService {
     private String picUrl;
 
     @Autowired
+    private BlogElasticDao blogElasticDao;
+
+    @Autowired
+    private ElasticsearchTemplate elasticsearchTemplate;    //es工具
+
+    /**
+     * ZSET的键名
+     */
+    private final static String VIEW_KEY = "INTEREST_VIEW";
+
+    /**
+     * ZSET中的对象前缀
+     */
+    private final static String BLOG_VIEW_PRE = "INTEREST_BLOG_VIEW_";
+
+    @Autowired
     private StringRedisTemplate template;
 
+    /**
+     * 存博客
+     * @param blog
+     */
     @Transactional(rollbackFor = RuntimeException.class)
     public void postBlog(Blog blog) {
         blog.setId(null);
@@ -56,7 +82,9 @@ public class BlogService {
         blog.setDigest(getDigest(blog.getContent()));
         blog.setTags(Lists.newArrayList(blog.getTagString().split(";")));
         try {
+            //存入blog
             blogDao.insertBlog(blog);
+            //存入tag
             List<Tag> tagList = tagDao.selectTags(-1);
             List<String> insertTags = Lists.newArrayList();
             for (String tag : blog.getTags()) {
@@ -68,6 +96,8 @@ public class BlogService {
                 tagDao.insertTags(insertTags);
                 tagDao.insertBlogTag(insertTags, blog.getId());
             }
+            //存入ElasticSearch
+            saveBlogToES(blog);
         } catch (Exception e) {
             throw new RuntimeException("博客储存出错");
         }
@@ -144,6 +174,11 @@ public class BlogService {
         return false;
     }
 
+    /**
+     * -1即取出所有博客
+     * @param tagId
+     * @return
+     */
     public List<Blog> getBlogByTag(int tagId) {
         return blogDao.selectBlogListByTag(tagId);
     }
@@ -156,9 +191,12 @@ public class BlogService {
      */
     @Transactional
     public int increAndGetBlogView(int blogId) {
-        String key = DateUtil.thisYear() + "_" + (DateUtil.thisMonth() + 1) + "_" + DateUtil.thisDayOfMonth() + "_" + blogId;
-        template.opsForValue().increment(key, 1);
-        return getBlogView(blogId);
+        String key = BLOG_VIEW_PRE + blogId;
+        Double view = template.opsForZSet().incrementScore(VIEW_KEY, key, 1);
+        if (view == null) {
+            throw new RuntimeException("Redis 浏览量服务出错");
+        }
+        return view.intValue();
     }
 
     /**
@@ -166,44 +204,30 @@ public class BlogService {
      * @return 所有匹配的键名的值的和
      */
     public int getBlogView(int blogId) {
-        String key = "*_*_*_" + blogId;
-        RedisConnection connection = template.getConnectionFactory().getConnection();
-        ScanOptions options = ScanOptions.scanOptions().match(key).count(Integer.MAX_VALUE).build();
-        Cursor<byte[]> cursor = connection.scan(options);
-        int views = 0;
-        while (cursor.hasNext()) {
-            byte[] next = cursor.next();
-            views += Integer.parseInt(template.opsForValue().get(new String(next, StandardCharsets.UTF_8)));
+        String key = BLOG_VIEW_PRE + blogId;
+        Double view = template.opsForZSet().score(VIEW_KEY, key);
+        if (view == null) {
+            return 0;
         }
-        connection.close();
-        return views;
+        return view.intValue();
     }
+
     public int getBlogSumView() {
-        String key = "*_*_*_" + "*";
-        RedisConnection connection = template.getConnectionFactory().getConnection();
-        ScanOptions options = ScanOptions.scanOptions().match(key).count(Integer.MAX_VALUE).build();
-        Cursor<byte[]> cursor = connection.scan(options);
-        int views = 0;
-        while (cursor.hasNext()) {
-            byte[] next = cursor.next();
-            System.out.println(new String(next, StandardCharsets.UTF_8));
-            views += Integer.parseInt(template.opsForValue().get(new String(next, StandardCharsets.UTF_8)));
+        int sum = 0;
+        Set<ZSetOperations.TypedTuple<String>> typedTuples = template.opsForZSet().rangeWithScores(VIEW_KEY, 0, -1);
+        if (typedTuples != null) {
+            for (ZSetOperations.TypedTuple<String> typedTuple : typedTuples) {
+                if (typedTuple.getScore() != null) {
+                    sum += typedTuple.getScore().intValue();
+                }
+            }
         }
-        connection.close();
-        return views;
+        return sum;
     }
 
     public void deleteBlogView(int blogId) {
-        String key = "*_*_*_" + blogId;
-        RedisConnection connection = template.getConnectionFactory().getConnection();
-        ScanOptions options = ScanOptions.scanOptions().match(key).count(Integer.MAX_VALUE).build();
-        Cursor<byte[]> cursor = connection.scan(options);
-        while (cursor.hasNext()) {
-            byte[] next = cursor.next();
-            template.delete(new String(next, StandardCharsets.UTF_8));
-        }
-        connection.close();
-
+        String key = BLOG_VIEW_PRE + blogId;
+        template.opsForZSet().remove(VIEW_KEY, key);
     }
 
     @Transactional
@@ -218,4 +242,106 @@ public class BlogService {
     public int getTagNum() {
         return tagDao.selectTagNum();
     }
+
+    /**
+     * 从redis中根据点击数给博客排序
+     * @return
+     */
+    public List<Blog> getBlogByViews() {
+        Set<ZSetOperations.TypedTuple<String>> typedTuples = template.opsForZSet().reverseRangeWithScores(VIEW_KEY, 0, -1);
+        if (typedTuples == null) {
+            return Lists.newArrayList();
+        }
+        List<Blog> blogList = new ArrayList<>();
+        for (ZSetOperations.TypedTuple<String> typedTuple : typedTuples) {
+            Blog blog = new Blog();
+            String[] splits = Objects.requireNonNull(typedTuple.getValue()).split("_");
+            blog.setId(Integer.parseInt(splits[splits.length-1]));
+            blog.setViews(Objects.requireNonNull(typedTuple.getScore()).intValue());
+            blog.setTitle(blogDao.selectOneBlog(blog.getId()).getTitle());
+            blogList.add(blog);
+            if(blogList.size()==6){
+                break;
+            }
+        }
+        return blogList;
+    }
+
+
+    /**
+     * 返回根据评论数量排序的博客列表
+     * @return
+     */
+    public List<Blog> getBlogByComment() {
+        return blogDao.selectBlogListByComment();
+    }
+
+    private void saveBlogToES(Blog blog) {
+        Blog saveBlog = new Blog();
+        saveBlog.setId(blog.getId());
+        saveBlog.setTitle(blog.getTitle());
+        saveBlog.setContent(blog.getContent());
+        blogElasticDao.save(saveBlog);
+    }
+
+    /**
+     * 临时方法，不要使用
+     * @return
+     */
+    public List<Blog> queryAllBlog() {
+      return  blogDao.selectAllBlog();
+    }
+
+    public List<Blog> getBlogByLike(String content) {
+        AggregatedPage<Blog> aggrBlogs = getBlogListByContentLikeFromES(content, 0, 3);
+        if (aggrBlogs == null) {
+            return Lists.newArrayList();
+        }
+        return aggrBlogs.getContent();
+    }
+
+    /**
+     * 从es检索数据相似的博客，返回高亮内容
+     * @param content  搜索关键字
+     * @param pageNum  页
+     * @param pageSize 条
+     * @return
+     */
+    private AggregatedPage<Blog> getBlogListByContentLikeFromES(String content, Integer pageNum, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        String preTag = "<font color='#dd4b39'>";//google的色值
+        String postTag = "</font>";
+        SearchQuery searchQuery = new NativeSearchQueryBuilder().
+                withQuery(matchQuery("content", content)).
+                withHighlightFields(new HighlightBuilder.Field("content").preTags(preTag).postTags(postTag)).build();
+        searchQuery.setPageable(pageable);
+
+        // 高亮字段
+        AggregatedPage<Blog> blogs = elasticsearchTemplate.queryForPage(searchQuery, Blog.class, new SearchResultMapper() {
+
+            @Override
+            public <T> AggregatedPage<T> mapResults(SearchResponse response, Class<T> clazz, Pageable pageable) {
+                List<Blog> chunk = new ArrayList<>();
+                for (SearchHit searchHit : response.getHits()) {
+                    if (response.getHits().getHits().length <= 0) {
+                        return null;
+                    }
+                    Blog blog = new Blog();
+                    HighlightField blogContent = searchHit.getHighlightFields().get("content");
+                    if (blogContent != null) {
+                        blog.setContent(blogContent.fragments()[0].toString());
+                    }
+                    blog.setId(Integer.parseInt(searchHit.getId()));
+                    blog.setTitle((String) searchHit.getSourceAsMap().get("title"));
+                    chunk.add(blog);
+                }
+                if (chunk.size() > 0) {
+                    return new AggregatedPageImpl<>((List<T>) chunk);
+                }
+                return null;
+            }
+        });
+        return blogs;
+    }
+
 }

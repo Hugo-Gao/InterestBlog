@@ -14,4 +14,5 @@ public class Comment {
     private String nickname;
     private String content;
     private Date createTime;
+    private String blogTitle;
 }

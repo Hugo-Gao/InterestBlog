@@ -134,11 +134,11 @@
 <script type="text/javascript">
     $(".close").click(function ()
     {
-        $(".test").hide();
+        $(".testSave").hide();
     });
 
     var
-        fileInput = document.getElementById('test-image-file'),
+        fileInput = document.getElementById('testSave-image-file'),
         preview = document.getElementById('avatar');
     // 监听change事件:
     fileInput.addEventListener('change', function ()
