@@ -25,12 +25,13 @@ public class BlogServiceTest {
     @Autowired
     private BlogService blogService;
 
+
     @Test
     public void postBlog() {
         Blog blog = new Blog();
         blog.setTagString("java;python");
-        blog.setTitle("test");
-        blog.setContent("test");
+        blog.setTitle("testSave");
+        blog.setContent("testSave");
         blog.setModifyTime(new Date());
         blog.setCreateTime(new Date());
         blogService.postBlog(blog);
@@ -95,6 +96,7 @@ public class BlogServiceTest {
 
     @Test
     public void getBlogView() {
+
     }
 
     @Test
@@ -110,5 +112,17 @@ public class BlogServiceTest {
         int tagNum = blogService.getTagNum();
         System.out.println(tagNum);
         Assert.assertNotEquals(tagNum,0);
+    }
+
+    @Test
+    public void zsetTest() {
+
+    }
+
+    @Test
+    public void blogCommentsView() {
+        List<Blog> blogByComment = blogService.getBlogByComment();
+        System.out.println(blogByComment);
+        Assert.assertNotEquals(blogByComment.size(), 0);
     }
 }

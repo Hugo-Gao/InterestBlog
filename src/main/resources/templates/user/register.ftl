@@ -39,7 +39,7 @@
                                 <div class="custom-file">
                                     <input type="file" id="test-image-file" class="custom-file-input" name="avatarFile">
                                     <label class="custom-file-label">Choose file</label>
-                                    <#--<div id="test-image-preview"-->
+                                    <#--<div id="testSave-image-preview"-->
                                          <#--style="text-align: center;border: 1px solid #ccc;width: 50px; height: 50px; background-size: contain; background-repeat: no-repeat; background-position: center center;"></div>-->
                                 </div>
                             </div>
@@ -77,8 +77,8 @@
     });
     //检查是否支持FileReader对象
     var
-        fileInput = document.getElementById('test-image-file'),
-        preview = document.getElementById('test-image-preview');
+        fileInput = document.getElementById('testSave-image-file'),
+        preview = document.getElementById('testSave-image-preview');
     // 监听change事件:
     fileInput.addEventListener('change', function ()
     {

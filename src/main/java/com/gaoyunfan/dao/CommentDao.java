@@ -27,4 +27,6 @@ public interface CommentDao {
      * @return
      */
     int selectCommentNum(@Param("blogId")int blogId);
+
+    List<Comment> selectNewestComment(int num);
 }

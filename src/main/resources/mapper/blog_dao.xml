@@ -27,6 +27,17 @@
         select id, title, content, createTime, modifyTime, digest from blog
         where id in (select blogId from blog_tag where tagId=#{tagId})
     </select>
+    <select id="selectBlogListByComment" resultType="com.gaoyunfan.model.Blog">
+        select b.id,title,count(*) as commentsView
+        from blog b right join comment_blog cb
+        on b.id=cb.blog_id
+        group by b.id order by commentsView desc
+
+
+    </select>
+    <select id="selectAllBlog" resultType="com.gaoyunfan.model.Blog">
+        select id,content,title from blog
+    </select>
 
 </mapper>
 

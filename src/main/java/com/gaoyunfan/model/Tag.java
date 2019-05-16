@@ -1,6 +1,7 @@
 package com.gaoyunfan.model;
 
 import lombok.Data;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 /**
  * @author yunfan.gyf

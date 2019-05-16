@@ -28,4 +28,8 @@ public class CommentService {
     public int getCommentNum(int blogId) {
         return commentDao.selectCommentNum(blogId);
     }
+
+    public List<Comment> getNewestComments(int num) {
+        return commentDao.selectNewestComment(num);
+    }
 }

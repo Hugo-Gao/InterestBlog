@@ -25,7 +25,7 @@
                                     <span class="fa fa-github"></span> Watch
                                 </button>
                                 <button class="btn btn-outline-primary btn-sm"
-                                    <span class="fa fa-envelope"></span> ${user.email}
+                                <span class="fa fa-envelope"></span> ${user.email}
                                 </button>
                             </div>
                         </div>
@@ -36,7 +36,8 @@
                                               style="background-image: url(${user.avaterPath})"></span>
                                     <div class="media-body">
                                         <h4 class="m-0">${user.nickName}</h4>
-                                        <p class="text-muted mb-0" style="margin-top: 5px">${user.city}  ${user.company}</p>
+                                        <p class="text-muted mb-0"
+                                           style="margin-top: 5px">${user.city}  ${user.company}</p>
                                         <p class="text-muted mb-0">${user.aboutme}</p>
 
                                         <ul class="social-links list-inline mb-0 mt-2">
@@ -74,5 +75,18 @@
         <@common.footer/>
 
     </div>
+    <script type="text/javascript">
+        $("#searchInput").blur(function ()
+            {
+                console.log("失去焦点");
+                setTimeout(function ()
+                {
+                    $("#searchDialog").removeClass("show");
+                    $("#searchDialog").empty()
+                }, 200)
+
+            }
+        )
+    </script>
 </body>
 </html>

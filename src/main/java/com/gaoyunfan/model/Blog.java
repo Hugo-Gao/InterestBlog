@@ -1,6 +1,9 @@
 package com.gaoyunfan.model;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import java.util.Date;
 import java.util.List;
@@ -9,6 +12,7 @@ import java.util.List;
  * @author yunfan.gyf
  **/
 @Data
+@Document(indexName = "interestblog",type = "blog")
 public class Blog {
     private Integer id;
     private String title;
@@ -23,4 +27,5 @@ public class Blog {
     private String picUrl;
     private String mdContent;
     private int views;
+    private int commentsView;
 }

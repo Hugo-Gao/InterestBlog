@@ -70,7 +70,7 @@
 </div>
 <script type="text/javascript">
     $(".close").click(function(){
-        $(".test").hide();
+        $(".testSave").hide();
     })
 </script>
 </body>

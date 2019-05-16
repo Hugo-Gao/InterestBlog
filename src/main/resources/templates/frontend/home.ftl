@@ -5,7 +5,7 @@
 <body>
 <div class="page">
     <div class="page-main">
-       <@common.head_tab tab='home'/>
+        <@common.head_tab tab='home'/>
         <div class="my-3 my-md-5">
             <div class="container">
                 <div class="page-header">
@@ -73,5 +73,18 @@
     </div>
     <@common.footer/>
 </div>
+<script type="text/javascript">
+    $("#searchInput").blur(function ()
+        {
+            console.log("失去焦点");
+            setTimeout(function ()
+            {
+                $("#searchDialog").removeClass("show");
+                $("#searchDialog").empty()
+            },200)
+
+        }
+    )
+</script>
 </body>
 </html>

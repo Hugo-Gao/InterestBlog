@@ -25,7 +25,7 @@ public class CookieUtil {
     public static void writeCookie(HttpServletResponse response, String cookieName, String value) {
         Cookie cookie = new Cookie(cookieName, value);
         cookie.setPath("/");
-        cookie.setMaxAge(3600);
+        cookie.setMaxAge(3600*24);
         response.addCookie(cookie);
     }
 }
