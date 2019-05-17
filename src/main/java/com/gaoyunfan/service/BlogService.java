@@ -1,5 +1,6 @@
 package com.gaoyunfan.service;
 
+import com.alibaba.fastjson.JSON;
 import com.gaoyunfan.dao.BlogDao;
 import com.gaoyunfan.dao.BlogElasticDao;
 import com.gaoyunfan.dao.CommentDao;
@@ -9,6 +10,8 @@ import com.gaoyunfan.model.Pagination;
 import com.gaoyunfan.model.Tag;
 import com.google.common.collect.Lists;
 import com.youbenzi.mdtool.tool.MDTool;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
@@ -36,6 +39,7 @@ import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
  * @author yunfan.gyf
  **/
 @Service
+@Slf4j
 public class BlogService {
 
     @Autowired
@@ -67,8 +71,10 @@ public class BlogService {
      */
     private final static String BLOG_VIEW_PRE = "INTEREST_BLOG_VIEW_";
 
+    private final static String BLOG_DETAIL_CACHE_KEY = "INTEREST_BLOG_DETAIL_";
+
     @Autowired
-    private StringRedisTemplate template;
+    private StringRedisTemplate redisTemplate;
 
     /**
      * 存博客
@@ -138,12 +144,22 @@ public class BlogService {
     }
 
     public Blog getBlogDetail(int blogId) {
-        Blog blog = blogDao.selectOneBlog(blogId);
-        if (blog == null) {
-            return null;
+        String blogStr = redisTemplate.opsForValue().get(BLOG_DETAIL_CACHE_KEY + blogId);
+        if (!StringUtils.isBlank(blogStr)) {
+            log.info("找到了"+blogId+"博客的缓存");
+            return JSON.parseObject(blogStr, Blog.class);
+        }else {
+            log.info("没找到"+blogId+"博客的缓存");
+            Blog blog = blogDao.selectOneBlog(blogId);
+            if (blog == null) {
+                return null;
+            }
+            blog.setMdContent(renderMD(blog.getContent()));
+            String blogCache = JSON.toJSONString(blog);
+            redisTemplate.opsForValue().set(BLOG_DETAIL_CACHE_KEY + blogId, blogCache);
+            log.info("将" + blogId + "存入缓存");
+            return blog;
         }
-        blog.setMdContent(renderMD(blog.getContent()));
-        return blog;
     }
 
     /**
@@ -192,7 +208,7 @@ public class BlogService {
     @Transactional
     public int increAndGetBlogView(int blogId) {
         String key = BLOG_VIEW_PRE + blogId;
-        Double view = template.opsForZSet().incrementScore(VIEW_KEY, key, 1);
+        Double view = redisTemplate.opsForZSet().incrementScore(VIEW_KEY, key, 1);
         if (view == null) {
             throw new RuntimeException("Redis 浏览量服务出错");
         }
@@ -205,7 +221,7 @@ public class BlogService {
      */
     public int getBlogView(int blogId) {
         String key = BLOG_VIEW_PRE + blogId;
-        Double view = template.opsForZSet().score(VIEW_KEY, key);
+        Double view = redisTemplate.opsForZSet().score(VIEW_KEY, key);
         if (view == null) {
             return 0;
         }
@@ -214,7 +230,7 @@ public class BlogService {
 
     public int getBlogSumView() {
         int sum = 0;
-        Set<ZSetOperations.TypedTuple<String>> typedTuples = template.opsForZSet().rangeWithScores(VIEW_KEY, 0, -1);
+        Set<ZSetOperations.TypedTuple<String>> typedTuples = redisTemplate.opsForZSet().rangeWithScores(VIEW_KEY, 0, -1);
         if (typedTuples != null) {
             for (ZSetOperations.TypedTuple<String> typedTuple : typedTuples) {
                 if (typedTuple.getScore() != null) {
@@ -227,7 +243,7 @@ public class BlogService {
 
     public void deleteBlogView(int blogId) {
         String key = BLOG_VIEW_PRE + blogId;
-        template.opsForZSet().remove(VIEW_KEY, key);
+        redisTemplate.opsForZSet().remove(VIEW_KEY, key);
     }
 
     @Transactional
@@ -237,6 +253,7 @@ public class BlogService {
         commentDao.deleteComment(blogId);
         commentDao.deleteCommentBlog(blogId);
         deleteBlogView(Integer.parseInt(blogId));
+        redisTemplate.delete(BLOG_DETAIL_CACHE_KEY + blogId);
     }
 
     public int getTagNum() {
@@ -248,7 +265,7 @@ public class BlogService {
      * @return
      */
     public List<Blog> getBlogByViews() {
-        Set<ZSetOperations.TypedTuple<String>> typedTuples = template.opsForZSet().reverseRangeWithScores(VIEW_KEY, 0, -1);
+        Set<ZSetOperations.TypedTuple<String>> typedTuples = redisTemplate.opsForZSet().reverseRangeWithScores(VIEW_KEY, 0, -1);
         if (typedTuples == null) {
             return Lists.newArrayList();
         }
