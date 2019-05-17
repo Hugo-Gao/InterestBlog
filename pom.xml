@@ -11,7 +11,7 @@
     <packaging>jar</packaging>
     <groupId>com.gaoyunfan</groupId>
     <artifactId>InterestBlog</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>InterestBlog</name>
     <description>Interesting Blog System</description>
 
