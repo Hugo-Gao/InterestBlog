@@ -56,7 +56,10 @@
                                             <td class="text-center">
                                                 <div class="text-center">${blog.createTime?string('yyyy-MM-dd HH:mm')}</div>
                                             </td>
+
                                             <td class="text-center">
+                                                <a href="/backend/to_edit_page?blogId=${blog.id}" class="card-options-remove" style="margin: 5px"><i class="fe fe-edit-3"></i></a>
+
                                                 <a href="#" class="card-options-remove" onclick="deleteBlog(${blog.id})"><i class="fe fe-x"></i></a>
                                             </td>
                                         </tr>

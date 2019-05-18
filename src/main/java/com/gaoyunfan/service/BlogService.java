@@ -78,6 +78,7 @@ public class BlogService {
 
     /**
      * 存博客
+     *
      * @param blog
      */
     @Transactional(rollbackFor = RuntimeException.class)
@@ -91,23 +92,27 @@ public class BlogService {
             //存入blog
             blogDao.insertBlog(blog);
             //存入tag
-            List<Tag> tagList = tagDao.selectTags(-1);
-            List<String> insertTags = Lists.newArrayList();
-            for (String tag : blog.getTags()) {
-                if (!containsTag(tagList, tag)) {
-                    insertTags.add(tag);
-                }
-            }
-            if (insertTags.size() > 0) {
-                tagDao.insertTags(insertTags);
-                tagDao.insertBlogTag(insertTags, blog.getId());
-            }
+            saveTag(blog);
             //存入ElasticSearch
             saveBlogToES(blog);
         } catch (Exception e) {
             throw new RuntimeException("博客储存出错");
         }
 
+    }
+
+    private void saveTag(Blog blog) {
+        List<Tag> tagList = tagDao.selectTags(-1);
+        List<String> insertTags = Lists.newArrayList();
+        for (String tag : blog.getTags()) {
+            if (!containsTag(tagList, tag)) {
+                insertTags.add(tag);
+            }
+        }
+        if (insertTags.size() > 0) {
+            tagDao.insertTags(insertTags);
+            tagDao.insertBlogTag(insertTags, blog.getId());
+        }
     }
 
     /**
@@ -146,10 +151,10 @@ public class BlogService {
     public Blog getBlogDetail(int blogId) {
         String blogStr = redisTemplate.opsForValue().get(BLOG_DETAIL_CACHE_KEY + blogId);
         if (!StringUtils.isBlank(blogStr)) {
-            log.info("找到了"+blogId+"博客的缓存");
+            log.info("找到了" + blogId + "博客的缓存");
             return JSON.parseObject(blogStr, Blog.class);
-        }else {
-            log.info("没找到"+blogId+"博客的缓存");
+        } else {
+            log.info("没找到" + blogId + "博客的缓存");
             Blog blog = blogDao.selectOneBlog(blogId);
             if (blog == null) {
                 return null;
@@ -192,6 +197,7 @@ public class BlogService {
 
     /**
      * -1即取出所有博客
+     *
      * @param tagId
      * @return
      */
@@ -246,14 +252,20 @@ public class BlogService {
         redisTemplate.opsForZSet().remove(VIEW_KEY, key);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = RuntimeException.class)
     public void deleteBlog(String blogId) {
-        blogDao.deleteBlog(blogId);
-        tagDao.deleteBlogTag(blogId);
-        commentDao.deleteComment(blogId);
-        commentDao.deleteCommentBlog(blogId);
-        deleteBlogView(Integer.parseInt(blogId));
-        redisTemplate.delete(BLOG_DETAIL_CACHE_KEY + blogId);
+        try {
+            blogDao.deleteBlog(blogId);
+            tagDao.deleteBlogTag(blogId);
+            commentDao.deleteComment(blogId);
+            commentDao.deleteCommentBlog(blogId);
+            blogElasticDao.deleteById(new Integer(blogId));
+            deleteBlogView(Integer.parseInt(blogId));
+            redisTemplate.delete(BLOG_DETAIL_CACHE_KEY + blogId);
+        } catch (Exception e) {
+            throw new RuntimeException("删除博客失败");
+        }
+
     }
 
     public int getTagNum() {
@@ -262,6 +274,7 @@ public class BlogService {
 
     /**
      * 从redis中根据点击数给博客排序
+     *
      * @return
      */
     public List<Blog> getBlogByViews() {
@@ -273,11 +286,11 @@ public class BlogService {
         for (ZSetOperations.TypedTuple<String> typedTuple : typedTuples) {
             Blog blog = new Blog();
             String[] splits = Objects.requireNonNull(typedTuple.getValue()).split("_");
-            blog.setId(Integer.parseInt(splits[splits.length-1]));
+            blog.setId(Integer.parseInt(splits[splits.length - 1]));
             blog.setViews(Objects.requireNonNull(typedTuple.getScore()).intValue());
             blog.setTitle(blogDao.selectOneBlog(blog.getId()).getTitle());
             blogList.add(blog);
-            if(blogList.size()==6){
+            if (blogList.size() == 6) {
                 break;
             }
         }
@@ -287,6 +300,7 @@ public class BlogService {
 
     /**
      * 返回根据评论数量排序的博客列表
+     *
      * @return
      */
     public List<Blog> getBlogByComment() {
@@ -303,10 +317,11 @@ public class BlogService {
 
     /**
      * 临时方法，不要使用
+     *
      * @return
      */
     public List<Blog> queryAllBlog() {
-      return  blogDao.selectAllBlog();
+        return blogDao.selectAllBlog();
     }
 
     public List<Blog> getBlogByLike(String content) {
@@ -319,6 +334,7 @@ public class BlogService {
 
     /**
      * 从es检索数据相似的博客，返回高亮内容
+     *
      * @param content  搜索关键字
      * @param pageNum  页
      * @param pageSize 条
@@ -361,4 +377,22 @@ public class BlogService {
         return blogs;
     }
 
+    @Transactional(rollbackFor = RuntimeException.class)
+    public boolean updateBlog(Blog blog) {
+        boolean isSuccess;
+        try {
+            blog.setModifyTime(new Date());
+            blog.setDigest(getDigest(blog.getContent()));
+            blog.setTags(Lists.newArrayList(blog.getTagString().split(";")));
+            int update = blogDao.updateBlog(blog);
+            saveTag(blog);
+            saveBlogToES(blog);
+            redisTemplate.delete(BLOG_DETAIL_CACHE_KEY + blog.getId());
+            isSuccess = update > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("博客修改出错");
+        }
+        return isSuccess;
+    }
 }

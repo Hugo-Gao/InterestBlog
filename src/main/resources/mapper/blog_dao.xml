@@ -5,14 +5,38 @@
 <mapper namespace="com.gaoyunfan.dao.BlogDao">
 
     <insert id="insertBlog" useGeneratedKeys="true" keyProperty="id">
-        insert into blog(title, content, createTime, modifyTime,digest)
-        values (#{title}, #{content}, #{createTime}, #{modifyTime},#{digest})
+        insert into blog(title, content, createTime, modifyTime, digest)
+        values (#{title}, #{content}, #{createTime}, #{modifyTime}, #{digest})
     </insert>
+
+    <update id="updateBlog">
+        update blog
+        <set>
+            <if test="title!=null and title!=''">
+                title=#{title},
+            </if>
+            <if test="content!=null and content!=''">
+                content=#{content},
+            </if>
+            <if test="modifyTime!=null">
+                modifyTime=#{modifyTime},
+            </if>
+            <if test="digest!=null and digest!=''">
+                digest=#{digest}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
     <delete id="deleteBlog">
-        delete from blog where id=#{blogId}
+        delete
+        from blog
+        where id = #{blogId}
     </delete>
     <select id="selectBlogList" resultType="com.gaoyunfan.model.Blog">
-        select id,title,digest,createTime from blog order by createTime desc
+        select id, title, digest, createTime
+        from blog
+        order by createTime desc
         limit #{pageIndex},#{pageNum}
     </select>
     <select id="selectBlogNum" resultType="java.lang.Integer">
@@ -20,23 +44,28 @@
         from blog;
     </select>
     <select id="selectOneBlog" resultType="com.gaoyunfan.model.Blog">
-        select id, title, content, createTime, modifyTime, digest from blog
+        select id, title, content, createTime, modifyTime, digest
+        from blog
         where id = #{blogId}
     </select>
     <select id="selectBlogListByTag" resultType="com.gaoyunfan.model.Blog">
-        select id, title, content, createTime, modifyTime, digest from blog
-        where id in (select blogId from blog_tag where tagId=#{tagId})
+        select id, title, content, createTime, modifyTime, digest
+        from blog
+        where id in (select blogId from blog_tag where tagId = #{tagId})
     </select>
     <select id="selectBlogListByComment" resultType="com.gaoyunfan.model.Blog">
-        select b.id,title,count(*) as commentsView
-        from blog b right join comment_blog cb
-        on b.id=cb.blog_id
-        group by b.id order by commentsView desc
+        select b.id, title, count(*) as commentsView
+        from blog b
+                 right join comment_blog cb
+                            on b.id = cb.blog_id
+        group by b.id
+        order by commentsView desc
 
 
     </select>
     <select id="selectAllBlog" resultType="com.gaoyunfan.model.Blog">
-        select id,content,title from blog
+        select id, content, title
+        from blog
     </select>
 
 </mapper>

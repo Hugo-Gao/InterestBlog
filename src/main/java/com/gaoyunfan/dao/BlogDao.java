@@ -28,4 +28,6 @@ public interface BlogDao {
     List<Blog> selectBlogListByComment();
 
     List<Blog> selectAllBlog();
+
+    int updateBlog(Blog blog);
 }

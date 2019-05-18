@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author yunfan.gyf
@@ -60,14 +61,53 @@ public class BackendController {
         if (StringUtils.isEmpty(blog.getContent())) {
             return "back/backend_write_blog";
         }
-//        ResultMsg msg = ResultMsg.successMsg("");
         blogService.postBlog(blog);
-//        msg.setSuccessMsg("博客发表成功");
         modelMap.put("successMsg", "博客发表成功");
-//        return "redirect:/backend/write_blog?" + msg.asUrlParams();
         return "back/backend_write_blog";
-
     }
+
+
+    /**
+     * 转向博客页面
+     *
+     * @param id
+     * @param modelMap
+     * @return
+     */
+    @RequestMapping("/to_edit_page")
+    public String toEditPage(@RequestParam("blogId") int id, ModelMap modelMap) {
+        User user = userService.getUser();
+        modelMap.put("user", user);
+        Blog editBlog = blogService.getBlogDetail(id);
+        if (editBlog == null) {
+            //此博客不存在
+            modelMap.put("errorMsg", "该博客不存在");
+            return "back/backend_edit_blog";
+        }
+        //博客存在,取出博客的所有详细内容
+        String tagStr = blogService.getTagList(id).stream().map(Tag::getTag).collect(Collectors.joining(";"));
+        editBlog.setTagString(tagStr);
+        modelMap.put("blog", editBlog);
+        return "back/backend_edit_blog";
+    }
+
+    @RequestMapping(value = "/edit_blog",method = RequestMethod.POST)
+    public String editBlog(Blog blog, ModelMap modelMap) {
+        User user = userService.getUser();
+        modelMap.put("user", user);
+        boolean isSuccess = blogService.updateBlog(blog);
+        if (isSuccess) {
+            modelMap.put("successMsg", "博客修改成功");
+        }else {
+            modelMap.put("errorMsg", "博客修改失败");
+        }
+        Blog editedBlog = blogService.getBlogDetail(blog.getId());
+        String tagStr = blogService.getTagList(blog.getId()).stream().map(Tag::getTag).collect(Collectors.joining(";"));
+        editedBlog.setTagString(tagStr);
+        modelMap.put("blog", editedBlog);
+        return "back/backend_edit_blog";
+    }
+
 
     @RequestMapping("/aboutme")
     public String aboutme(ModelMap modelMap, User user) {
@@ -75,9 +115,9 @@ public class BackendController {
             User oldUser = userService.getUser();
             modelMap.put("user", oldUser);
             return "back/aboutme";
-        }else {
+        } else {
             ResultMsg msg = ResultMsg.successMsg("");
-            userService.updateUser(user,msg);
+            userService.updateUser(user, msg);
             User updateUser = userService.getUser();
             modelMap.put("successMsg", "更新成功");
             modelMap.put("user", updateUser);
@@ -101,7 +141,7 @@ public class BackendController {
             List<Tag> tagList = blogService.getTagList(blog.getId());
             blog.setTagList(tagList);
         }
-        modelMap.put("page",pageIndex);
+        modelMap.put("page", pageIndex);
         modelMap.put("pageSum", pageSum);
         modelMap.put("blogList", blogList);
         return "back/articles";

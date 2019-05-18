@@ -13,7 +13,7 @@
                     <div class="col-lg-8">
                         <div class="card card-profile">
                             <div class="card-header"
-                                 style="background-image: url(https://uploadbeta.com/api/pictures/random/);"></div>
+                                 style="background-image: url(https://uploadbeta.com/api/pictures/random/);height: 300px"></div>
                             <div class="card-body text-center">
                                 <img class="card-profile-img" src="${user.avaterPath}">
                                 <h3 class="mb-3">${user.blogName}</h3>
