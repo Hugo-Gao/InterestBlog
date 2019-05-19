@@ -15,17 +15,17 @@
                             <div class="card-header"
                                  style="background-image: url(https://uploadbeta.com/api/pictures/random/);height: 300px"></div>
                             <div class="card-body text-center">
-                                <img class="card-profile-img" src="${user.avaterPath}">
-                                <h3 class="mb-3">${user.blogName}</h3>
+                                <img class="card-profile-img" src="${(user.avaterPath)!}">
+                                <h3 class="mb-3">${(user.blogName)!}</h3>
                                 <p class="mb-4">
-                                    ${user.slogan}
+                                    ${(user.slogan)!}
                                 </p>
                                 <button class="btn btn-outline-primary btn-sm"
-                                        onclick="window.location.href='${user.githubUrl}'">
+                                        onclick="window.location.href='${(user.githubUrl)!}'">
                                     <span class="fa fa-github"></span> Watch
                                 </button>
                                 <button class="btn btn-outline-primary btn-sm"
-                                <span class="fa fa-envelope"></span> ${user.email}
+                                <span class="fa fa-envelope"></span> ${(user.email)!}
                                 </button>
                             </div>
                         </div>
@@ -35,10 +35,10 @@
                                         <span class="avatar avatar-xxl mr-5"
                                               style="background-image: url(${user.avaterPath})"></span>
                                     <div class="media-body">
-                                        <h4 class="m-0">${user.nickName}</h4>
+                                        <h4 class="m-0">${(user.nickName)!}</h4>
                                         <p class="text-muted mb-0"
-                                           style="margin-top: 5px">${user.city}  ${user.company}</p>
-                                        <p class="text-muted mb-0">${user.aboutme}</p>
+                                           style="margin-top: 5px">${(user.city)!}  ${(user.company)!}</p>
+                                        <p class="text-muted mb-0">${(user.aboutme)!}</p>
 
                                         <ul class="social-links list-inline mb-0 mt-2">
                                             <#if user.githubUrl?? >

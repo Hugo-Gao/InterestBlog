@@ -4,6 +4,7 @@ import com.gaoyunfan.model.User;
 import com.gaoyunfan.service.UserService;
 import com.gaoyunfan.util.CookieUtil;
 import com.google.common.base.Joiner;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -11,6 +12,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -46,8 +49,13 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
 
         String email = CookieUtil.getCookie(httpServletRequest, "user_cookie");
+        User user = userService.getUser();
+        if(user==null&&!reqUri.contains("js")&&!reqUri.contains("css")&&!reqUri.contains("register"))
+        {
+            httpServletResponse.sendRedirect("/user/register?errorMsg="+ new String("请先编码".getBytes(), StandardCharsets.ISO_8859_1));
+            return false;
+        }
         if (email != null) {
-            User user = userService.getUser();
             if (user == null) {
                 throw new RuntimeException("没有注册");
             }
